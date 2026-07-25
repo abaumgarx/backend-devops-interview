@@ -3,7 +3,6 @@ import random
 from datetime import timedelta
 
 from django.core.management.base import BaseCommand
-from django.db import connection
 from django.utils import timezone
 from django.utils.text import slugify
 from faker import Faker

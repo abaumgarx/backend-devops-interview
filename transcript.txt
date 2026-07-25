@@ -1,0 +1,57 @@
+Disclaimer: I shortened some replies in this transcript to make it easier to read, while keeping all the facts.
+
+
+>> Review the given code base of a web app backend that uses Django + Ninja + Postgres. Identify potential security risks and performance bottlenecks.
+
+Security:
+*) Hardcoded secrets and debug settings in core/settings.py: SECRET_KEY, DEBUG = True, ALLOWED_HOSTS = ["*"], DB credentials (postgres/postgres).
+*) No authorization on mutating endpoints.
+*) User enumeration / data exposure.
+*) No rate limiting anywhere.
+*) Unbounded input: Post.body/Comment.body are TextField() with no length ceiling.
+*) Minor: email is not validated or unique at the DB level.
+
+Performance:
+*) Unbounded N+1 queries on every list-type endpoint.
+*) No pagination anywhere.
+*) Search does a full scan.
+*) Missing indexes that match the actual query patterns.
+*) get_post turns a read into an expensive write, with a correctness bug attached.
+*) create_post's tag loop - Tag.objects.get(slug=slug) inside a for loop is N queries for N tags.
+*) No persistent DB connections.
+
+>> I need some coffee now
+
+Fair enough - that's a lot to take in at once. Go grab it, the code review will still be here when you're back.
+
+>> Create a docker compose configuration to improve the developer experience
+
+Files suggested by the AI
+
+>> Keep it simple. No entrypoint.sh is needed
+
+Files suggested by the AI (Dockerfile and docker-compose.yml were generated and I used them with slight manual modification / simplification.)
+
+>> Fix the hardcoded database settings. Use the environment variable DATABASE_URL.
+
+Modifications suggested by the AI
+
+>> Do not introduce the module os, keep it simple
+
+The modifications suggested by the AI also added the connection timeout (I used the modified settings.py and added the dependency dj_database_url.)
+
+>> Fix the unbounded input problem in the schemas
+
+schemas.py fixed (The chosen max_length values seemed to be reasonable.)
+
+>> Fix the endpoint api.py. Introduce pagination. Simplify it where possible
+
+Modifications suggested by the AI
+
+>> The pagination must be cursor based. Use the original ordering ("-created_at", "-id")
+
+Modifications suggested by the AI
+
+>> Remove all the manual serializations
+
+Modifications suggested by the AI (I used the modified api.py and cleaned it up.)

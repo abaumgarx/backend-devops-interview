@@ -29,7 +29,7 @@ def test_list_posts_returns_published(client, user):
 
     assert response.status_code == 200
     data = response.json()
-    titles = [p["title"] for p in data]
+    titles = [p["title"] for p in data["results"]]
     assert "Hello" in titles
     assert "Draft" not in titles
 

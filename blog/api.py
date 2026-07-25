@@ -57,6 +57,7 @@ def get_post(request, post_id: int):
         id=post_id,
     )
     Post.objects.filter(id=post_id).update(view_count=F("view_count") + 1)
+    post.view_count += 1
     return post
 
 
