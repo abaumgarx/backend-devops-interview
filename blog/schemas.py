@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from ninja import Schema
+from pydantic import Field
 
 
 class AuthorOut(Schema):
@@ -55,8 +56,8 @@ class UserDetailOut(Schema):
 
 class PostCreateIn(Schema):
     author_id: int
-    title: str
-    body: str
+    title: str = Field(min_length=1, max_length=255)
+    body: str = Field(min_length=1, max_length=20000)
     tag_slugs: list[str] = []
 
 
@@ -67,7 +68,7 @@ class PostCreateOut(Schema):
 
 class CommentCreateIn(Schema):
     author_id: int
-    body: str
+    body: str = Field(min_length=1, max_length=2000)
 
 
 class CommentCreateOut(Schema):

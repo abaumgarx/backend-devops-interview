@@ -1,0 +1,24 @@
+name: fintual-interview
+services:
+  postgres-db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: backend_devops_interview
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d backend_devops_interview"]
+      interval: 3s
+      retries: 5
+
+  web-app:
+    container_name: fintual-web-app
+    build: .
+    ports: ["8000:8000"]
+    volumes: [".:/app"]
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres-db:5432/backend_devops_interview
+      UV_LINK_MODE: copy
+    depends_on:
+      postgres-db:
+        condition: service_healthy
