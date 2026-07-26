@@ -8,6 +8,7 @@ I decided to focus on developer experience and blog/api endpoint refactoring. So
 - Performance improvements blog/api: Fixed N+1 database calls.
 - Other improvements blog/api: Ditch the manual serialization, since the schema specifies that anyways.
 - Other improvements blog/api: Use an atomic F() expression to increment view_count (concurrency concern).
+- Other improvements blog/api: Make create_post atomic (DB consistency concern).
 - Security concerns: DB credentials are now obtained from environment variables (using dj_database_url)
 - Security concerns: Length ceiling - unbounded storage/DoS vector has been fixed (introducing max_length for title and body).
 
