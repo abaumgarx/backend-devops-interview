@@ -127,7 +127,7 @@ class Command(BaseCommand):
         comment_post_weights = _long_tail_weights(len(post_data), top_pct=0.01, top_share=0.5)
 
         comment_text_pool = [
-            f"{fake.sentence(nb_words=5).rstrip('.')}. {fake.sentence(nb_words=10)}"
+            f"{fake.sentence(nb_words=5)} {fake.sentence(nb_words=10)}"
             for _ in range(COMMENT_POOL_SIZE)
         ]
 
