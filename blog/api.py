@@ -61,6 +61,7 @@ def get_post(request, post_id: int):
     return post
 
 
+@transaction.atomic
 @router.post("/posts", response=PostCreateOut)
 def create_post(request, payload: PostCreateIn):
     author = get_object_or_404(User, id=payload.author_id)
